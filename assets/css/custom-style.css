@@ -1,0 +1,64 @@
+.bg-abu{
+	background: #dfdfdf !important;
+}
+.bg-blue{
+	background: #24107e  !important;
+}
+.scroll-view{
+	overflow-x: scroll;
+}
+table{
+	width: max-content !important;
+}
+
+
+
+.focusedRow
+{
+    font-weight: bold;
+    text-shadow: 1px 1px 0px #EEE;
+    color: #111;   
+}
+.rounded-2{
+	border-radius: 50px !important;
+
+}
+.focus-border-none{
+	outline: none !important;
+	border: none !important;
+}
+.btn-hapus-image{
+	background: #fd4747;
+	color: white;
+	padding: 10px;
+	width: 50px;
+	height: 50px;
+	border: none;
+	position: relative;
+	z-index: 2;
+	left: -130px;
+	transition: background 0.5s;
+	overflow: hidden;
+	opacity: 0;
+	transition: opacity 1s;
+	top: -50px;
+	
+
+}
+.btn-hapus-image:hover{
+	background: #730a0a;
+	transition: background 0.5s;
+	cursor: pointer;
+	opacity: 1;
+}
+.list-img:hover{
+	webkit-filter: blur(4px); /* Chrome, Safari, Opera */
+    filter: blur(2px);
+    cursor: pointer;
+    transition: filter 1s;
+}
+.list-img:hover + .btn-hapus-image{
+	 opacity: 1;
+	transition: opacity 1s;
+}
+

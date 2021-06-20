@@ -1,0 +1,5 @@
+merah : FF7089
+bire 1 : 90CAF9
+bireu 2 : 90CAF9
+biru 3 : 38385F
+black-blue : 23203B

@@ -1,0 +1,167 @@
+.bg-dark-blue{
+	background: #1e044e  !important;
+}
+@font-face{
+  src: url(../font/Poppins-Bold.ttf);
+  font-family: rb;
+}
+@font-face{
+  src: url(../font/Poppins-Regular.ttf);
+  font-family: rr;
+}
+@font-face{
+  src: url(../font/Poppins-Light.ttf);
+  font-family: rl;
+}
+
+h4{
+  font-family: rb;
+}
+form{
+    margin-top:50px;
+}
+
+  .input-field {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    margin:auto;
+  }
+  .input-field i{
+    float:right;
+    margin-top: -30px;
+    color: white;
+    margin-right: 10px;
+  }
+  .input-field > label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: #d3d3d3;
+    transition: 0.2s all;
+    cursor: text;
+    font-size: 12pt;
+    font-family: rl;
+    margin-left: 10px;
+    letter-spacing: 0.1rem;
+    
+  }
+  .input-field > input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    padding: 0rem 0;
+    border-bottom: 1px solid #d3d3d3;
+    box-shadow: none;
+    
+    letter-spacing: 0.2rem;
+    font-family:rl;
+  
+  
+  }
+  .input-field > input:invalid {
+    outline: 0;
+    
+  }
+  .input-field > input:focus,
+  .input-field > input:valid {
+    border-color: #f85a5f;
+    transition: border-color 1s;
+    
+  }
+  .input-field > input:focus~label,
+  .input-field > input:valid~label {
+    font-size: 14px;
+    top: -24px;
+    color: #f85a5f;
+  }
+  
+  /* //// */
+
+  
+  #input-field2 {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    margin:auto;
+  }
+  #input-field2 i{
+    float:right;
+    margin-top: -30px;
+    color: white;
+    margin-right: 10px;
+  }
+  #input-field2 > label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: #d3d3d3;
+    transition: 0.2s all;
+    cursor: text;
+    font-size: 12pt;
+    font-family: rl;
+    margin-left: 10px;
+    letter-spacing: 0.1rem;
+  }
+  #input-field2 > input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    padding: 0rem 0;
+    border-bottom: 1px solid #d3d3d3;
+    box-shadow: none;
+    letter-spacing: 0.2rem;
+    font-family:rl;
+
+  
+  
+  }
+  #input-field2 > input:invalid {
+    outline: 0;
+    
+  }
+  #input-field2 > input:focus,
+  #input-field2 > input:valid {
+    border-color: #f85a5f;
+    transition: border-color 1s;
+  }
+  #input-field2 > input:focus~label,
+  #input-field2 > input:valid~label {
+    font-size: 14px;
+    top: -24px;
+    color: #f85a5f;
+  }
+
+  .form-check-input{
+    background: red !important;
+  }
+.btn-red{
+  background: #fa252c;
+  border: none;
+  padding: 10px 50px;
+  float: right;
+  color: #d3d3d3;
+  border-radius: 20px;
+  font-weight: bold;
+  outline: none;
+  user-select: select none;
+  text-decoration: none;
+  transition: background 0.5s;
+  box-shadow: 0px 0px 0px rgb(0, 0, 0);
+  transition: box-shadow 0.5s;
+}
+.btn-red:focus{
+  outline: none;
+}
+.btn-red:hover{
+  background: #630609;
+  transition: background 0.5s;
+  box-shadow: 0px 5px 0px rgb(0, 0, 0);
+  transition: box-shadow 0.5s;
+}

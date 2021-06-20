@@ -1,0 +1,121 @@
+/*merah : FF7089
+bire 1 : 90CAF9
+bireu 2 : 90CAF9
+biru 3 : 38385F
+ECF4FF
+black-blue : 23203B*/
+/*font*/
+
+@font-face{
+  src: url(../font/Poppins-Bold.ttf);
+  font-family: pb;
+}
+@font-face{
+  src: url(../font/Poppins-Regular.ttf);
+  font-family: pr;
+}
+@font-face{
+  src: url(../font/Poppins-Light.ttf);
+  font-family: pl;
+}
+@font-face{
+  src: url(../font/Poppins-Medium.ttf);
+  font-family: pm;
+}
+.pb{
+	font-family: pb !important;
+}
+.pm{
+	font-family: pm !important;
+}
+.pr{
+	font-family: pr !important;
+}
+.pl{
+	font-family: pl !important;
+}
+.bg-pink{
+	background: #F95572 !important;
+}
+.bg-blue-0{
+	background: #ECF4FF !important;
+}
+.bg-blue-1{
+	background: #90CAF9 !important;
+}
+
+.bg-blue-2{
+	background: #263238;
+}
+.bg-blue-dark{
+	background: #23203B;
+}
+.text-blue-dark{
+	color:  #23203B !important;
+}
+.text-blue-0{
+	color: #ECF4FF !important;
+}
+.text-blue-1{
+	color: #90CAF9 !important;
+}
+.text-blue-2{
+	color: #263238 !important;
+}
+.text-pink{
+	color: #F95572 !important;
+}
+.rounded-1{
+	border-radius: 10px !important;
+}
+.rounded-2{
+	border-radius: 10px;
+}
+.content-main-1{
+	width: max-content;
+	
+	overflow: hidden;
+	float: left;
+}
+.jam > label{
+	padding: 5px 10px;
+	font-size: 10pt;
+
+}
+.shadow-tin{
+	box-shadow: 0px 12px 23px -7px rgba(0, 0, 0, 0.25) !important;
+}
+.history ul li{
+	list-style: none;
+
+}
+.history ul{
+	display: contents;
+	font-size: 9pt;
+}
+.active-menu{
+	color: #FF7089 !important;
+}
+.berita_kosong{
+	border-radius: 20px;
+	border-style: dashed;
+	text-align: center;
+	opacity: 0.5;
+	display: flex;
+	align-items: center;
+	padding: 0px;
+}
+.berita_kosong label{
+	margin: 0 auto;
+}
+.berita_kosong img{
+	margin: 0 auto;
+}
+.jam{
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
