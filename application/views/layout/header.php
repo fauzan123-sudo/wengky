@@ -28,7 +28,11 @@
      background-color:transparent;
      border: none;
   }
+  .table tr td{
+    vertical-align: middle !important;
+  }
 </style>
+
 <body id="page-top" onload="startTime()">
 
   <!-- Page Wrapper -->

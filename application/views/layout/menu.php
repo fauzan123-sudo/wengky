@@ -22,7 +22,17 @@
           <i class="fas fa-fw fa-home"></i>
           <span>Dashboard</span></a>
       </li>
-
+      <li class="nav-item <?php if($data_link == 1){ echo "active";} ?> dropright">
+        <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-glass-martini-alt"></i>
+          <span>Asset</span></a>
+          <div class="dropdown-menu">
+            <a href="<?= base_url() ?>jenis_izin" class="dropdown-item" type="button">Jenis Izin</a>
+            <a href="<?= base_url() ?>departement" class="dropdown-item" type="button">Departement</a>
+            <a href="<?= base_url() ?>potongan_gaji" class="dropdown-item" type="button">Potongan Gaji</a>
+            <a href="<?= base_url() ?>periode" class="dropdown-item" type="button">Periode</a>
+          </div>
+      </li>
       <!-- Divider -->
       <!-- Nav Item - Charts -->
       <li class="nav-item <?php if($data_link == 1){ echo "active";} ?>">

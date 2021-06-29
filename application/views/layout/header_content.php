@@ -13,17 +13,69 @@
             
           </div>
           <!-- Topbar Navbar -->
-          <div class="m-auto font-weight-bold rounded-2 jam text-white" >
+          <div class="m-auto font-weight-bold rounded-2 jam text-white d-none" >
            
             <label id="jam"  class="bg-dark rounded-2 pl-4 pr-4">12:00:00 AM</label>
             
           </div>
+
+
+
+          <div class="modal bg-transparent" id="modalPeriode" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content bg-blue-2">
+                <div class="modal-header  font-weight-bold text-white">
+                  <h5 class="modal-title">Ganti Periode</h5>
+                  <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body bg-white p-0">
+                  <div class="btn-group-vertical btn-block">
+                    <?php
+                      $data = $this->m_periode->getDataAll()->result();
+                     foreach ($data as $key => $value):
+                        $btn = ($value->kode == $this->session->userdata['periode']) ? 'btn-danger' : 'btn-success disabled';
+                        if ($value->kode != "") {
+                            $bulan = substr($value->kode, -2);
+                            $tahun = substr($value->kode, 0,4);
+
+                            $resultBulan = setBulan($bulan);
+
+                            $resultPeriode = "Periode : ".$resultBulan." ".$tahun;
+                          }
+                    ?>
+                    <a href="#" type="button" class="btn <?= $btn ?> btn-block py-4 rounded-0"><?= $resultPeriode ?></a>
+                  <?php endforeach; ?>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
           <ul class="navbar-nav ml-auto d-flex align-items-center">
 
 
             <!-- Nav Item - Messages -->
             
-            
+            <button type="button" class="btn btn-outline-danger rounded-0 mr-4" data-toggle="modal" data-target="#modalPeriode">
+             <?php 
+                    $periode = $this->session->userdata['periode'];
+
+                    if ($periode != "") {
+                        $bulan = substr($periode, -2);
+                        $tahun = substr($periode, 0,4);
+
+                        $resultBulan = setBulan($bulan);
+
+                        echo "Periode : ".$resultBulan." ".$tahun;
+                    }else{
+                        echo "Periode : Kosong !!!";
+                    }
+                    
+                ?>
+            </button>
                <div class="mr-2 d-none d-block text-gray-600 small text-right text-capitalize">
                 <div class="mb-0 pb" style="font-size: 12pt; color: #FF7089;"><?= $this->session->userdata("Nama"); ?></div>
                 <div class="pb" style="color: black">Jabatan : ceo</div>

@@ -1,26 +1,30 @@
-<?php 
+<?php
 
 /**
  * 
  */
-class M_absensi extends CI_Model{
-	function getDataAll(){
+class M_absensi_commit extends CI_Model{
+	var $table = 'absen_commit';
+	function getDataBy($where){
 		$periode = $this->session->userdata('periode');
-		// SELECT * FROM `riwayat_absensi` INNER JOIN pegawai ON pegawai.id_pegawai = riwayat_absensi.id_pegawai 
-		$this->db->select("*");
-		$this->db->from("riwayat_absensi");
-		$this->db->join("pegawai","riwayat_absensi.id_pegawai = pegawai.id_pegawai","left");
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$this->db->where('id_pegawai',$where);
 		$this->db->where('periode',$periode);
 		return $this->db->get();
 	}
-	// function read_data_absensi(){
-	// 	$this->db->select("*");
-	// 	$this->db->from("absensi");
-	// 	$this->db->join("pegawai","riwayat_absensi.id_karyawan = pegawai.id_pegawai","left");
-	// 	return $this->db->get();
+	function addData($data){
+		$this->db->insert($this->table,$data);
+	}
+	function updateData($data,$id){
 
-	// }
-
+		$periode = $this->session->userdata('periode');
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$this->db->where('id_pegawai',$where);
+		$this->db->where('periode',$periode);
+		return $this->db->get();
+	}
 	function getData($postData=null){
 		$response = array();
 
@@ -41,15 +45,15 @@ class M_absensi extends CI_Model{
 
 	     ## Total number of records without filtering
 	     $this->db->select('count(*) as allcount');
-	     $this->db->from('riwayat_absensi');
-	     $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+	     $this->db->from('absen_commit');
+	     $this->db->join("pegawai","pegawai.id_pegawai = absen_commit.id_pegawai");
 	     $records = $this->db->get()->result();
 	     $totalRecords = $records[0]->allcount;
 
 	     ## Total number of record with filtering
 	     $this->db->select('count(*) as allcount');
-	     $this->db->from('riwayat_absensi');
-	     $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+	     $this->db->from('absen_commit');
+	     $this->db->join("pegawai","pegawai.id_pegawai = absen_commit.id_pegawai");
 	     if($searchQuery != '')
 	        $this->db->where($searchQuery);
 	     $records = $this->db->get()->result();
@@ -57,8 +61,8 @@ class M_absensi extends CI_Model{
 
 	     ## Fetch records
 	     $this->db->select('*');
-	     $this->db->from('riwayat_absensi');
-	     $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+	     $this->db->from('absen_commit');
+	     $this->db->join("pegawai","pegawai.id_pegawai = absen_commit.id_pegawai");
 	     if($searchQuery != '')
 	        $this->db->where($searchQuery);
 	     $this->db->order_by($columnName, $columnSortOrder);
@@ -68,13 +72,16 @@ class M_absensi extends CI_Model{
 	     $data = array();
 
 	     foreach($records as $record ){
-	     	$time = time_indo_convert($record->jam);
+	     
 	        $data[] = array( 
-	           "jam"=>$time[1],
-	           "tanggal"=>$time[0],
 	           "nama"=>$record->nama,
 	           "nip"=>$record->nip,
-	           "lokasi"=>'<small><a class="btn btn-warning btn-sm" target="_blank" href="'.$record->lokasi.'"><i class="fas fa-map-marker-alt"></i> Cek Lokasi</a></small>',
+	           "masuk"=>$record->masuk,
+	           "tidak_masuk"=>$record->tidak_masuk,
+	           "sakit"=>$record->sakit,
+	           "izin"=>$record->izin,
+	           "telat"=>$record->telat,
+	           "tugas"=>$record->tugas,
 	        ); 
 	     }
 
@@ -88,7 +95,4 @@ class M_absensi extends CI_Model{
 
 	     return $response;
 	}
-
-	
-
 }

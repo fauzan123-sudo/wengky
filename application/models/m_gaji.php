@@ -6,8 +6,8 @@
  */
 class M_gaji extends CI_Model{
 
-  	var $select_column = array("id_gaji","gaji_pokok","asuransi","nama","nip","potong_gaji");  
-   	var $order_column = array(null,"gaji_pokok","asuransi","nama","nip",null,"potong_gaji"); 
+  	var $select_column = array("id_gaji","gaji_pokok","nama","nip","gaji_bersih");  
+   	var $order_column = array(null,"gaji_pokok","nama","nip",null,"gaji_bersih"); 
 
     
    	function make_query() {  
@@ -15,7 +15,7 @@ class M_gaji extends CI_Model{
        $this->db->from('gaji'); 
        $this->db->join('pegawai','gaji.id_pegawai=pegawai.id_pegawai','left');
        $this->db->join('potongan','gaji.potongan=potongan.potongan','left');
-
+       $this->db->where('periode',$this->session->userdata('periode'));
 
          if(isset($_POST["search"]["value"]))  {  
               $this->db->like("nama", $_POST["search"]["value"]);  
@@ -33,8 +33,7 @@ class M_gaji extends CI_Model{
       }
     function make_datatables(){  
            $this->make_query();  
-           if($_POST["length"] != -1)  
-           {  
+           if($_POST["length"] != -1){  
                 $this->db->limit($_POST['length'], $_POST['start']);  
            }  
            $query = $this->db->get();  

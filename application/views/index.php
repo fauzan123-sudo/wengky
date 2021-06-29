@@ -11,7 +11,7 @@ $this->load->view('layout/header_content');
  <div class="container-fluid p-0 mx-auto">
 
   <div class="row pl-3 pr-3 ">
-     <div class="col-xl-7 col-md-5 mb-4 mt-3" style="display: inline-table;">
+     <div class="col mb-4 mt-3" style="display: inline-table;">
       <div class="card bg-pink shadow-tin h-100 py-2 rounded-1 border-0 ">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -72,7 +72,7 @@ $this->load->view('layout/header_content');
       <div class="row">
         <div class="col">
           <div class="card mt-4 shadow-tin rounded-1">
-            <div class="card-body">
+            <div class="card-body ">
               <div class="row">
                 <div class="col d-flex align-items-center justify-content-between">
                   <small class="pb text-pink"><i class="fas fa-chart-pie mr-2"></i> Statistik Absensi</small>
@@ -93,7 +93,7 @@ $this->load->view('layout/header_content');
               </div>
               <div class="row">
                 <div class="col">
-                  <canvas id="myChart" width="100px" height="300px"></canvas>
+                  <canvas id="myChart" width="10px" height="300px"></canvas>
                 </div>
               </div>
             </div>
@@ -101,7 +101,7 @@ $this->load->view('layout/header_content');
         </div>
       </div>
     </div>
-     <div class="col-xl-5 col-md-5 mb-4 mt-3" style="display: inline-table;"  >
+     <div class="col mb-4 mt-3" style="display: inline-table;"  >
       <div class="card shadow-tin h-100 rounded-1">
         <div class="card-body">
           <div class="row mb-2">
@@ -146,7 +146,7 @@ $this->load->view('layout/header_content');
                     <div class="col text-right">
                       <div class="media d-flex align-items-center">
                         <div class="media-body mr-3">
-                          <h6 class="mb-0 pb text-white text-capitalize" ><?= $key->nama ?></h6>
+                          <h6 class="mb-0 pb text-capitalize" ><?= $key->nama ?></h6>
                           <label class="mb-0 pb" style="font-size: 9pt; color: black">Jabatan : <?= $key->jabatan ?></label>
                         </div>
                         <img class="rounded-circle" src="<?= base_url() ?>assets/img/wadmin.png" width="50px" height="50px">

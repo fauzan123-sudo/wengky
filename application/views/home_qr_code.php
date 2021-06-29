@@ -25,7 +25,7 @@
 
 <body class="bg-blue-2 pl">
 <div class="container p-4">
-  <h4 class="text-white font-weight-bold text-center"><img src="<?= base_url() ?>assets/img/logo.png" class="mr-2 " style="width: 2%;">CODE QR KARYAWAN<img src="<?= base_url() ?>assets/img/logo.png" class="ml-2 " style="width: 2%;"></h4>
+  <h4 class="text-white font-weight-bold text-center mb-4">CODE QR KARYAWAN</h4>
   <form>
     <div class="input-group mb-3 rounded-2 overflow-hidden bg-white">
       <input id="search" type="text" class="form-control m-2 rounded-2  focus-border-none" style="height: 50px;" placeholder="Cari QR-CODE anda dengan Nama" aria-describedby="basic-addon2">

@@ -8,11 +8,12 @@ $this->load->view('layout/header_content');
 
 ?>
 <div class="container-fluid mb-4">
-	<div class="row shadow-tin bg-white mt-3 rounded overflow-hidden">
+	<?php $data['bc'] = $breadcump; $this->load->view('layout/breadcump',$data); ?>
+	<div class="row shadow-tin bg-white mt-1 mx-2 rounded overflow-hidden">
 		<div class="col p-0">
 			<div class="row ">
 				<div class="col">
-					<?php $data['bc'] = $breadcump; $this->load->view('layout/breadcump',$data); ?>
+					
 					<a id="print_data" href="<?= base_url() ?>index.php/admin/print_karyawan" target="_blank" class="btn-primary btn rounded-0 float-right"><i class="fa fa-print"></i> Report</a>
 					<button id="tambah_data" type="button" class="btn-danger btn rounded-0 float-right" data-target="#tambah_karyawan" data-toggle="modal"><i class="fa fa-plus"></i> Tambah</button>
 					<button id="update_qr" type="button" class="btn-warning btn rounded-0 float-right"><i class="fa fa-qrcode"></i> Update QR Code</button>
@@ -23,7 +24,7 @@ $this->load->view('layout/header_content');
 					
 						<table class="table w-100" id="datatable">
 							
-							<thead class="bg-blue-1 text-white " >
+							<thead class=" text-blue " >
 								<tr>
 									<th>No</th>
 									<th>Action</th>
@@ -95,7 +96,12 @@ $this->load->view('layout/header_content');
 							  </div>
 							  <div class="form-group">
 							    <label for="in_jabatan">Jabatan</label>
-							    <input type="text" class="form-control" name="in_jabatan" required>
+							    <select class="custom-select" name="jabatan">
+							    	<option selected="" disabled>Pilih Jabatan</option>
+							    	<?php foreach ($jabatan as $key => $value): ?>
+							    		<option value="<?= $value->nama ?>"><?= $value->nama ?></option>
+							    	<?php endforeach;?>
+							    </select>
 							  </div>
 						</div>
 						<div class="col">
@@ -169,7 +175,10 @@ $this->load->view('layout/header_content');
 							  </div>
 							  <div class="form-group">
 							    <label for="up_jabatan">Jabatan</label>
-							    <input type="text" class="form-control" name="up_jabatan" id="up_jabatan">
+							    <select class="custom-select" name="up_jabatan">
+							    	<option disabled>Pilih Jabatan</option>
+							    	
+							    </select>
 							  </div>
 						</div>
 						<div class="col">
@@ -252,7 +261,7 @@ var id_karyawan;
 	            "serverSide": true,
 	            "hover" : true,
 	            "language": {
-            		processing: '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;min-height: 100vh; position:fixed; right:0; left:0; top:0; background:rgb(0,0,0, 0.5);height:100vh;"><div style="width:6rem; height:6rem;" class="spinner-border bg-blue text-danger" role="status"></div><label class="text-white">Sedang Memuat data ... </label></div>'},
+            		processing: ''},
 	          	"order" :[],
 				"ajax" :{
 					 url: "<?= base_url() ?>index.php/admin/read_pegawai",
@@ -344,6 +353,8 @@ var id_karyawan;
 
 		$(document).on('click','.edit',function () {
 			var id = $(this).attr('id');
+			var htmlOpt = "";
+			// console.log("cek jabatan ",getJabatan());
 			$.ajax({
 				type : 'ajax',
 				dataType : 'JSON',
@@ -351,13 +362,37 @@ var id_karyawan;
 				success : function (data) {
 					console.log(data);
 					id_karyawan = data[0].nip;
-
+			
+					
 					$('#up_username').val(data[0].username);
 					$('#up_nama').val(data[0].nama);
 					$('#up_tempat').val(data[0].tempat_lahir);
 					$('#up_tgl_lhr').val(data[0].tgl_lahir);
 					$('#up_tlp').val(data[0].no_tlp);
-					$('#up_jabatan').val(data[0].jabatan);
+					
+					$.ajax({
+						url: '<?= base_url() ?>departement/getData',
+						type: 'POST',
+						dataType: 'JSON',
+					})
+					.done(function(jabatan) {
+						for (var i = 0; i < jabatan.length; i++) {
+							if (jabatan[i].nama == data[0].jabatan) {
+								htmlOpt += "<option selected value='"+jabatan[i].nama+"'>"+jabatan[i].nama+"</option>";
+							}else{
+								htmlOpt += "<option value='"+jabatan[i].nama+"'>"+jabatan[i].nama+"</option>";
+							}
+							
+						}
+						$('select[name="up_jabatan"]').append(htmlOpt);
+					});
+
+					
+
+					// $('#up_jabatan').val(data[0].jabatan);
+
+					
+
 					$('#up_email').val(data[0].email);
 					$('#up_nip').val(data[0].nip);
 					$('#up_alamat').val(data[0].alamat);
@@ -366,38 +401,69 @@ var id_karyawan;
 				}
 			})
 			
-		})
+		});
+		// function getJabatan() {
+		// 	var result = [];
+		// 	$.ajax({
+		// 		url: '<?= base_url() ?>departement/getData',
+		// 		type: 'POST',
+		// 		dataType: 'JSON',
+		// 	})
+		// 	.done(function(data) {
+		// 		result = data;
+		// 	});
+			
+		// 	return result;
+		// }
 		
 	
 		//action delete
 		$(document).on('click','.delete-data',function () {
 			var id = $(this).attr('id');
-			$.ajax({
-				type : 'ajax',
-				url : '<?= base_url() ?>index.php/admin/delete_karyawan/'+id,
-				dataType : 'JSON',
-				
-				success : function () {
-					Swal.fire(
-						'Data Karyawan',
-						'Berhasil Terhapus',
-						'success'
-						);
 
-					$('#datatable').DataTable().destroy();
-					ambil_data();
-				
 
-					},
-				error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
-					Swal.fire(
-						'Data Karyawan',
-						'Gagal Terhapus',
-						'error'
-						);
-					}
 
+			Swal.fire({
+			  title: 'Apakah Kamu yakin hapus Data ini?',
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'Ya, Hapus ini!'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			   		$.ajax({
+						type : 'ajax',
+						url : '<?= base_url() ?>index.php/admin/delete_karyawan/'+id,
+						dataType : 'JSON',
+						
+						success : function () {
+							Swal.fire(
+								'Data Karyawan',
+								'Berhasil Terhapus',
+								'success'
+								);
+
+
+							$('#datatable').DataTable().destroy();
+							ambil_data();
+						
+
+							},
+						error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+							Swal.fire(
+								'Data Karyawan',
+								'Gagal Terhapus',
+								'error'
+								);
+							}
+
+					});
+			  	}
 			});
+
+
+			
 		});
 		
 		//priview gambar
@@ -446,10 +512,12 @@ var id_karyawan;
 		
 			readURL(this,status);
 		});
+
 		
 		
 	});
-
+	
+	
 	
 	
 

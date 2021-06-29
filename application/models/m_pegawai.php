@@ -5,37 +5,79 @@
  */
 class M_pegawai extends CI_Model{
 	
-	var $table = "pegawai";  
-   var $select_column = array("id_pegawai", "nama", "tempat_lahir", "tgl_lahir","alamat","email","no_tlp","jabatan","nip","username","image","code_qr");  
+	 var $table = "pegawai";  
+   var $select_column = array("id_pegawai", "nama", "tempat_lahir", "tgl_lahir","alamat","email","no_tlp","jabatan","nip","username","image","code_qr","periode");  
    var $order_column = array(null, "nama", "tempat_lahir",null,null,null,null,null,"username",null, null,null); 
 
     
-   function make_query() {  
-       $this->db->select($this->select_column);  
-       $this->db->from($this->table);  
-         if(isset($_POST["search"]["value"]))  {  
-              $this->db->like("nama", $_POST["search"]["value"]);  
-              $this->db->or_like("tempat_lahir", $_POST["search"]["value"]);  
-              $this->db->or_like("alamat", $_POST["search"]["value"]);  
-              $this->db->or_like("jabatan", $_POST["search"]["value"]);   
-         }  
+       function getData($postData=null){
+        $response = array();
 
+           ## Read value
+           $draw = $postData['draw'];
+           $start = $postData['start'];
+           $rowperpage = $postData['length']; // Rows display per page
+           $columnIndex = $postData['order'][0]['column']; // Column index
+           $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+           $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+           $searchValue = $postData['search']['value']; // Search value
 
-         if(isset($_POST["order"]))  {  
-              $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);  
-         }else{  
-              $this->db->order_by('id_pegawai', 'DESC');  
-         }  
+           ## Search 
+           $searchQuery = "";
+           if($searchValue != ''){
+              $searchQuery = " (nama like '%".$searchValue."%' or nip like '%".$searchValue."%' ) ";
+           }
+
+           ## Total number of records without filtering
+           $this->db->select('count(*) as allcount');
+           $this->db->from('riwayat_absensi');
+           $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+           $records = $this->db->get()->result();
+           $totalRecords = $records[0]->allcount;
+
+           ## Total number of record with filtering
+           $this->db->select('count(*) as allcount');
+           $this->db->from('riwayat_absensi');
+           $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+           if($searchQuery != '')
+              $this->db->where($searchQuery);
+           $records = $this->db->get()->result();
+           $totalRecordwithFilter = $records[0]->allcount;
+
+           ## Fetch records
+           $this->db->select('*');
+           $this->db->from('riwayat_absensi');
+           $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+           if($searchQuery != '')
+              $this->db->where($searchQuery);
+           $this->db->order_by($columnName, $columnSortOrder);
+           $this->db->limit($rowperpage, $start);
+           $records = $this->db->get()->result();
+
+           $data = array();
+
+           foreach($records as $record ){
+            $time = time_indo_convert($record->jam);
+              $data[] = array( 
+                 "jam"=>$time[1],
+                 "tanggal"=>$time[0],
+                 "nama"=>$record->nama,
+                 "nip"=>$record->nip,
+                 "lokasi"=>'<small><a class="btn btn-warning btn-sm" target="_blank" href="'.$record->lokasi.'"><i class="fas fa-map-marker-alt"></i> Cek Lokasi</a></small>',
+              ); 
+           }
+
+           ## Response
+           $response = array(
+              "draw" => intval($draw),
+              "iTotalRecords" => $totalRecords,
+              "iTotalDisplayRecords" => $totalRecordwithFilter,
+              "aaData" => $data
+           );
+
+           return $response;
       }
-      function make_datatables(){  
-           $this->make_query();  
-           if($_POST["length"] != -1)  
-           {  
-                $this->db->limit($_POST['length'], $_POST['start']);  
-           }  
-           $query = $this->db->get();  
-           return $query->result();  
-      }  
+       
       function get_filtered_data(){  
            $this->make_query();  
            $query = $this->db->get();  
@@ -49,7 +91,20 @@ class M_pegawai extends CI_Model{
       function get_data_max(){
           $this->db->select_max("id_pegawai");
           $this->db->get("pegawai");
-       
+      }
 
+      function getDataBy($where){
+          $this->db->select("*");
+          $this->db->from('pegawai');
+          $this->db->where('id_pegawai',$where);
+          $this->db->where('periode',$this->session->userdata('periode'));
+
+          return $this->db->get();
+      }
+       function getDataAll(){
+          $this->db->select("*");
+          $this->db->from('pegawai');
+          $this->db->where('periode',$this->session->userdata('periode'));
+          return $this->db->get();
       }
 }

@@ -6,6 +6,8 @@ class Admin extends CI_Controller {
 	var $file_qr;
 	function __construct(){
 		parent::__construct();
+		$this->load->library('encryption');
+		
 		if ($this->session->userdata("Status") != "login" ) {
 			redirect(base_url()."login");
 		}
@@ -21,18 +23,21 @@ class Admin extends CI_Controller {
 		$data['berita_acara'] = $this->m_data->berita_acara('berita_acara')->result();
 		$data['rlogin'] = $this->m_data->data_ruser();
 		$data['active_link'] = 0;
+
 		$this->load->view('index',$data);
 	}
 	function page_update_qr(){
 		$this->load->view('pages_proses_qr');
 	}
 	public function read_karyawan(){
-		$data = $this->m_data->read_data('pegawai')->result();
+		$periode = $this->session->userdata('periode');
+		$data = $this->m_data->read_data('pegawai')->where('periode',$periode)->result();
 		echo json_encode($data);
 	}
 	public function karyawan(){
 		$data['active_link'] = 1;
 		$data['breadcump'] = array("Beranda","Karyawan");
+		$data['jabatan'] = $this->m_departement->getData()->result();
 		$this->load->view('karyawan',$data);
 	}
 	public function gaji(){
@@ -78,7 +83,7 @@ class Admin extends CI_Controller {
 	                '<button type="button" name="update" id="'.$row->nip.'"  class="btn btn-sm edit mr-2"><i class="fa fa-edit fa-sm"></i>
 					</button>'.'<button type="button" name="delete" id="'.$row->nip.'" class="btn btn-sm delete-data btn-transparent"><i class="fa fa-trash fa-sm" aria-hidden="true"></i>
 					</button>
-					<a href="'.base_url().'detail_pegawai" name="detail" id="'.$row->nip.'" class="btn btn-sm delete-data btn-transparent"><i class="fa fa-info fa-sm" aria-hidden="true"></i>
+					<a href="'.base_url().'index.php/admin/detail_pegawai/'.$row->nip.'" name="detail" id="'.$row->nip.'" class="btn btn-sm  btn-transparent"><i class="fa fa-info fa-sm" aria-hidden="true"></i>
 					</a>';  
 				$sub_array[] = $this->security->xss_clean($row->nip);  	
                 $sub_array[] = $this->security->xss_clean($row->nama);  
@@ -407,7 +412,11 @@ class Admin extends CI_Controller {
 		echo json_encode($data);
 	}
 	function data_karyawan_by($id){
-		$where = array('nip' => $id );
+
+		$where = array(
+			'nip' => $id, 
+			'periode' => $this->session->userdata('periode')
+		);
 		$data = $this->m_data->read_data_by('pegawai',$where)->result();
 		echo json_encode($data);
 	}
@@ -466,10 +475,19 @@ class Admin extends CI_Controller {
    function ganti_pass(){
        $this->load->view('ganti_password');
    }
-   function detail_pegawai(){
-      $data['active_link'] = 1;
-		$data['breadcump'] = array("Beranda","Karyawan");
+   function detail_pegawai($nip){
+   		// $this->encryption->_mcrypt_exists = true;
+   		// var_dump($this->encryption->decrypt($nip));
+   		// 	die();
+
+      	$data['active_link'] = 1;
+		$data['breadcump'] = array("Beranda","Karyawan","Detail Karyawan");
+		$this->db->select("*");
+		$this->db->from('pegawai');
+		$this->db->where('nip', $nip);
+		$data['pegawai'] = $this->db->get()->row();
 		$this->load->view('detail_pegawai',$data);
    }
+
 	
 }

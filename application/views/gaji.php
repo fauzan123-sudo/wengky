@@ -29,9 +29,7 @@ $this->load->view('layout/header_content');
 									<th>Nama</th>
 									<th>NIP</th>
 									<th>Gaji Pokok</th>
-									<th>Asuransi</th>
 									<th>Potongan</th>
-									
 								</tr>
 							</thead>
 							<tbody id="table_gaji">
@@ -51,7 +49,7 @@ $this->load->view('layout/header_content');
 
 </div>
 <div id="tambah_gaji" class="modal fade bg-transparent" tabindex="-1" >
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content bg-blue-2">
 			<div class="modal-header border-bottom-danger  font-weight-bold text-white">
 				
@@ -62,58 +60,102 @@ $this->load->view('layout/header_content');
 			</div>
 			<form id="idata_gaji" >
 			<div class="modal-body bg-white">
-					<div class="form-group">
-				    <label for="in_karyawan">Nama Pegawai</label>
+				<div class="row">
+					<div class="col">
+						<div class="form-group">
+					    <label for="in_karyawan">Nama Pegawai</label>
+					   
+					    <select class="custom-select" name="in_karyawan" required>
+					    	<option selected disabled>Pilih Karyawan</option>
+					    	<?php 
+					    		$data = $this->m_data->read_data('pegawai')->result();
+					    		foreach ($data as $key ) { ?>
+
+					    		<option value="<?= $key->id_pegawai ?>"><?= $key->nama ?></option>
+					    	<?php } ?>
+					    	
+					    </select>
+					  </div>
+					 
+					  <div class="form-group">
+					    <label for="in_gaji">Gaji Pokok</label>
+					     <div class="input-group mb-3">
+						  <div class="input-group-prepend">
+						    <span class="input-group-text" id="basic-addon1">RP.</span>
+						  </div>
+						  <input type="text" class="form-control" name="in_gaji" id="in-gaji" required data-a-dec="," data-a-sep=".">
+						</div>
+					  </div>
+					 <div class="row">
+					 	<div class="col">
+					 		<div class="line-group">
+					 			<div class="label">Potongan Berdasarkan Absensi per Hari</div>
+					 			<small>Gaji Per Hari : Rp. <span id="val-gaji-per-hari" class="text-danger font-weight-bold"></span></small>
+
+					 			<table class="w-100">
+					 				<thead class="border-bottom">
+					 					<tr>
+					 						<th>Status</th>
+					 						<th>Absen</th>
+					 						<th>Potongan</th>
+					 						<th>Hasil</th>
+					 					</tr>
+					 				</thead>
+					 				<tbody>
+					 					<!-- <tr>
+					 						<td>Masuk</td>
+					 						<td>49</td>
+					 						<td>-</td>
+					 					</tr> -->
+					 					<tr>
+					 						<td>Tidak Hadir</td>
+					 						<td id="val-tidak-hadir">1</td>
+					 						<td id="val-tidak-hadir-pres">50%</td>
+					 						<td>-</td>
+					 					</tr>
+					 					<tr>
+					 						<td>Izin</td>
+					 						<td id="val-izin">1</td>
+					 						<td id="val-izin-pres">50%</td>
+					 						<td>-</td>
+					 					</tr>
+					 					<tr>
+					 						<td>Terlambat</td>
+					 						<td id="val-terlambat">1</td>
+					 						<td id="val-terlambat-pres">100%</td>
+					 						<td>-</td>
+					 					</tr>
+					 				</tbody>
+					 			</table>
+					 		</div>
+					 		
+					 	</div>
+					 </div>
+					</div>
+					<div class="col">
+						<div class="form-group">
+					    <label for="in_potongan">Potongan</label>
+					    <div class="input-group mb-3">
+						  <div class="input-group-prepend">
+						    <span class="input-group-text" id="basic-addon1">RP.</span>
+						  </div>
+						  <select class="custom-select" name="in_potongan" required>
+					    	<option selected disabled>Pilih Potongan</option>
+					    	<?php 
+					    		$data = $this->m_data->read_data('potongan')->result();
+					    		foreach ($data as $key ) { ?>
+
+					    		<option value="<?= ci_encode($key->id_potongan) ?>"><?= $key->jenis_potongan." - ".$key->value."%" ?></option>
+					    	<?php } ?>
+					    	
+					    </select>
+
+						</div>
+					  </div>
+					</div>
+				</div>
+					
 				   
-				    <select class="custom-select" name="in_karyawan" required>
-				    	<option selected disabled>Pilih Karyawan</option>
-				    	<?php 
-				    		$data = $this->m_data->read_data('pegawai')->result();
-				    		foreach ($data as $key ) { ?>
-
-				    		<option value="<?= $key->id_pegawai ?>"><?= $key->nama ?></option>
-				    	<?php } ?>
-				    	
-				    </select>
-				  </div>
-				 
-				  <div class="form-group">
-				    <label for="in_gaji">Gaji Pokok</label>
-				     <div class="input-group mb-3">
-					  <div class="input-group-prepend">
-					    <span class="input-group-text" id="basic-addon1">RP.</span>
-					  </div>
-					  <input type="number" class="form-control" name="in_gaji" required>
-					</div>
-				  </div>
-				  <div class="form-group">
-				    <label for="in_asuransi">Asuransi</label>
-				    <div class="input-group mb-3">
-					  <div class="input-group-prepend">
-					    <span class="input-group-text" id="basic-addon1">RP.</span>
-					  </div>
-					  <input type="number" class="form-control" name="in_asuransi" required>
-					</div>
-				  </div>
-				   <div class="form-group">
-				    <label for="in_potongan">Potongan</label>
-				    <div class="input-group mb-3">
-					  <div class="input-group-prepend">
-					    <span class="input-group-text" id="basic-addon1">RP.</span>
-					  </div>
-					  <select class="custom-select" name="in_potongan" required>
-				    	<option selected disabled>Pilih Potongan</option>
-				    	<?php 
-				    		$data = $this->m_data->read_data('potongan')->result();
-				    		foreach ($data as $key ) { ?>
-
-				    		<option value="<?= $key->potongan ?>"><?= $key->potong_gaji ?></option>
-				    	<?php } ?>
-				    	
-				    </select>
-
-					</div>
-				  </div>
 				
 			</div>
 			<div class="modal-footer">
@@ -147,7 +189,7 @@ $this->load->view('layout/header_content');
 				    		$no = 1;
 				    		foreach ($data as $key ) { ?>
 
-				    		<option class="nama_karyawan<?= $no ?>" value="<?= $key->id_pegawai ?>"><?= $key->nama ?></option>
+				    		<option class="nama_karyawan<?= $no ?>" value="<?= ci_encode($key->id_pegawai) ?>"><?= $key->nama ?></option>
 				    	<?php $no++; } ?>
 				    	
 				    </select>
@@ -162,15 +204,7 @@ $this->load->view('layout/header_content');
 					  <input type="number" class="form-control" name="up_gaji" id="up_gaji" required>
 					</div>
 				  </div>
-				  <div class="form-group">
-				    <label for="up_asuransi">Asuransi</label>
-				    <div class="input-group mb-3">
-					  <div class="input-group-prepend">
-					    <span class="input-group-text" id="basic-addon1">RP.</span>
-					  </div>
-					  <input type="number" class="form-control" name="up_asuransi" id="up_asuransi" required>
-					</div>
-				  </div>
+				
 				   <div class="form-group">
 				    <label for="up_potongan">Potongan</label>
 				    <div class="input-group mb-3">
@@ -215,8 +249,6 @@ $(document).ready(function () {
 	var id_gaji;
 	ambil_data() ;	
 		function ambil_data() {
-
-
 
 			$('#datatable').DataTable({
 				"scrollX":true,
@@ -378,7 +410,28 @@ $(document).ready(function () {
 					}
 
 			});
-		})
+		});
+
+		$('#in-gaji').keyup(function(event) {
+			
+			var result = gajiPerhari($(this).val());
+			
+			$('#val-gaji-per-hari').autoNumeric('init',{aPad:false});
+			$('#val-gaji-per-hari').autoNumeric('set',Math.ceil(result));
+		});
+		$('#in-gaji').autoNumeric('init',{aPad: false});
+		function gajiPerhari(gaji) {
+			
+
+			var countDay = <?= countDayIsMount() ?>;
+
+			var result = gaji.replaceAll('.','') / countDay;
+
+			return result;
+
+
+
+		}
 		
 	});
 

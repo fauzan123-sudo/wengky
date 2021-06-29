@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url','file','Tanggal_indo');
+$autoload['helper'] = array('url','file','Tanggal_indo','Fungsi');
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('m_data','m_pegawai','m_gaji','m_absensi','m_berita');
+$autoload['model'] = array('m_data','m_pegawai','m_gaji','m_absensi','m_berita','m_jenis_izin','m_departement','m_potongan','m_periode','m_absensi_commit');

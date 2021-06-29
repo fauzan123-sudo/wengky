@@ -12,10 +12,8 @@ $this->load->view('layout/header_content');
 		<div class="col p-0">
 			<div class="row ">
 				<div class="col">
-					<?php $data['bc'] = $breadcump; $this->load->view('layout/breadcump',$data); ?>
 					<button type="button" class="btn-danger btn rounded-0 float-right btn-refresh-a"><i class="fa fa-retweet"></i> Refresh</button>
-					<a href="<?= base_url() ?>index.php/absensi/absenCommit" class="btn-success btn rounded-0 float-right"><i class="fa fa-history"></i> Commit</a>
-					<a href="<?= base_url() ?>index.php/admin/riwayat_absensi" class="btn-primary btn rounded-0 float-right"><i class="fa fa-history"></i> Riwayat</a>
+					<a href="<?= base_url() ?>index.php/admin/riwayat_absensi" class="btn-primary btn rounded-0 float-right"><i class="fa fa-history"></i> Report</a>
 				</div>
 			</div>
 			<div class="row m-2">
@@ -25,11 +23,14 @@ $this->load->view('layout/header_content');
 					<table class="table w-100" id="data">
 						<thead>
 							<tr>
-								<th>Jam</th>
-								<th>Tanggal</th>
-								<th>NIP</th>
 								<th>Nama</th>
-								<th>Lokasi</th>
+								<th>NIP</th>
+								<th>Masuk</th>
+								<th>Tugas</th>
+								<th>Tidak Masuk</th>
+								<th>Izin</th>
+								<th>Sakit</th>
+								<th>Telat</th>
 							</tr>
 						</thead>
 						
@@ -59,15 +60,18 @@ $this->load->view('layout/footer');
 	          	'serverSide': true,
 	          	'serverMethod': 'post',
 	          	'ajax': {
-	            	'url':'<?php echo site_url('Absensi/read_absen')?>'
+	            	'url':'<?php echo site_url('absensi_commit/getData')?>'
 	          	},
         		responsive: true,
 	          	columns: [
-		            { data: 'jam'},
-		            { data: 'tanggal'},
-		            { data: 'nip' },
-		            { data: 'nama' },
-		            { data: 'lokasi' },
+		            { data: 'nama'},
+		            { data: 'nip'},
+		            { data: 'masuk' },
+		            { data: 'tugas' },
+		            { data: 'tidak_masuk' },
+		            { data: 'izin' },
+		            { data: 'sakit' },
+		            { data: 'telat' },
 		       
 	          	],
 		});

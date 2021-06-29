@@ -35,7 +35,8 @@ class Login extends CI_Controller{
         $userdata = array(
             'Nama' =>  $nama,
             'Status' =>  "login",
-            'Tanggal' => $date
+            'Tanggal' => $date,
+            'periode' => $this->m_periode->getDataLast()->kode
         );
         $data_rlogin = array('id_user' => $id_users );
 

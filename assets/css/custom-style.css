@@ -62,3 +62,20 @@ table{
 	transition: opacity 1s;
 }
 
+.line-group{
+	border: 1px solid #ff7904;
+	margin: 0.5rem 0;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	position: relative;
+}
+.line-group .label{
+	background: white;
+	position: absolute;
+	top: -15px;
+	left: 1rem;
+	padding: 0 0.5rem;
+}
+.line-group table{
+	font-size: small;
+}
