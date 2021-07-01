@@ -30,15 +30,15 @@ class M_pegawai extends CI_Model{
 
            ## Total number of records without filtering
            $this->db->select('count(*) as allcount');
-           $this->db->from('riwayat_absensi');
-           $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+           $this->db->from('pegawai');
+   
            $records = $this->db->get()->result();
            $totalRecords = $records[0]->allcount;
 
            ## Total number of record with filtering
            $this->db->select('count(*) as allcount');
-           $this->db->from('riwayat_absensi');
-           $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+           $this->db->from('pegawai');
+   
            if($searchQuery != '')
               $this->db->where($searchQuery);
            $records = $this->db->get()->result();
@@ -46,26 +46,34 @@ class M_pegawai extends CI_Model{
 
            ## Fetch records
            $this->db->select('*');
-           $this->db->from('riwayat_absensi');
-           $this->db->join("pegawai","pegawai.id_pegawai = riwayat_absensi.id_pegawai");
+           $this->db->from('pegawai');
+   
            if($searchQuery != '')
               $this->db->where($searchQuery);
-           $this->db->order_by($columnName, $columnSortOrder);
-           $this->db->limit($rowperpage, $start);
+              $this->db->order_by('nama', $columnSortOrder);
+              $this->db->limit($rowperpage, $start);
            $records = $this->db->get()->result();
 
            $data = array();
-
-           foreach($records as $record ){
-            $time = time_indo_convert($record->jam);
-              $data[] = array( 
-                 "jam"=>$time[1],
-                 "tanggal"=>$time[0],
-                 "nama"=>$record->nama,
-                 "nip"=>$record->nip,
-                 "lokasi"=>'<small><a class="btn btn-warning btn-sm" target="_blank" href="'.$record->lokasi.'"><i class="fas fa-map-marker-alt"></i> Cek Lokasi</a></small>',
-              ); 
-           }
+           $no = 1;
+           foreach($records as $row){  
+                  $date = time_indo_convert($row->tgl_lahir);
+                  $data[] = array(
+                    'no' => $no,
+                    'nip' => $this->security->xss_clean($row->nip),
+                    'nama' => $this->security->xss_clean($row->nama),
+                    'tanggal_lahir' => $this->security->xss_clean($date[0]),
+                    'email' => $this->security->xss_clean($row->email),
+                    'telepon' => $this->security->xss_clean($row->no_tlp),
+                    'jabatan' => $this->security->xss_clean($row->jabatan),
+                    'action' => '<button type="button" name="update" id="'.$row->nip.'"  class="btn btn-sm edit mr-2"><i class="fa fa-edit fa-sm"></i>
+                            </button>'.'<button type="button" name="delete" id="'.$row->nip.'" class="btn btn-sm delete-data btn-transparent"><i class="fa fa-trash fa-sm" aria-hidden="true"></i>
+                            </button>
+                            <a href="'.base_url().'index.php/admin/detail_pegawai/'.$row->nip.'" name="detail" id="'.$row->nip.'" class="btn btn-sm  btn-transparent"><i class="fa fa-info fa-sm" aria-hidden="true"></i>
+                            </a>',
+                  );
+                  $no++;
+             } 
 
            ## Response
            $response = array(
@@ -77,17 +85,7 @@ class M_pegawai extends CI_Model{
 
            return $response;
       }
-       
-      function get_filtered_data(){  
-           $this->make_query();  
-           $query = $this->db->get();  
-           return $query->num_rows();  
-      }       
-      function get_all_data(){  
-           $this->db->select("*");  
-           $this->db->from($this->table);  
-           return $this->db->count_all_results();  
-      }  
+      
       function get_data_max(){
           $this->db->select_max("id_pegawai");
           $this->db->get("pegawai");

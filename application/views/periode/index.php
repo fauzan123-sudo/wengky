@@ -26,6 +26,8 @@ $this->load->view('layout/header_content');
 									<th width="5%">No</th>
 									<th width="10%">Action</th>
 									<th>Periode</th>
+									<th>Start</th>
+									<th>Finish</th>
 								</tr>
 							</thead>
 							<tbody id="table_izin">
@@ -55,14 +57,18 @@ $this->load->view('layout/header_content');
 						<div class="col">
 							<div class="form-group form-input">
 							    <label for="nama-izin">Kode Periode</label>
-							    <small class="float-right"><label><a id="add_more" href="#">+ Add More</a></label></small>
-							    <input type="text" class="form-control" name="nama_izin[]" id="nama-izin" required>
+							    <input type="text" class="form-control" name="kode" id="kode" required>
+						  	</div>
+						  	<div class="form-group form-input">
+							    <label for="nama-izin">Start</label>
+							    <input type="date" class="form-control" name="start" id="start" required>
+						  	</div>
+						  	<div class="form-group form-input">
+							    <label for="nama-izin">Finish</label>
+							    <input type="date" class="form-control" name="finish" id="finish" required>
 						  	</div>
 						</div>
 					</div>
-					
-					  
-				
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-success" type="button" id="simpan">Simpan</button>
@@ -87,9 +93,16 @@ $this->load->view('layout/header_content');
 					<div class="row">
 						<div class="col">
 							<div class="form-group form-input">
-							    <label for="nama-izin">Nama Izin</label>
-
-							    <input type="text" class="form-control" name="nama_izin" id="nama-izin" required>
+							    <label for="nama-izin">Kode Periode</label>
+							    <input type="text" class="form-control" name="kode" id="kode" required>
+						  	</div>
+						  	<div class="form-group form-input">
+							    <label for="nama-izin">Start</label>
+							    <input type="date" class="form-control" name="start" id="start" required>
+						  	</div>
+						  	<div class="form-group form-input">
+							    <label for="nama-izin">Finish</label>
+							    <input type="date" class="form-control" name="finish" id="finish" required>
 						  	</div>
 						</div>
 					</div>
@@ -118,28 +131,18 @@ $this->load->view('layout/footer');
 		getData();
 		
 		var idUpdate = "";
-		$('#add_more').click(function(event) {
-			event.preventDefault();
-			
-			$(".form-input").append('<input type="text" class="form-control mt-2" name="nama_izin[]" required>');
-
-			
-			
-			
-		});
+		
 		$("#simpan").click(function(event) {
 			event.preventDefault();
 			var data = $("#data-tambah").serialize();
 			$.ajax({
-				url: '<?= base_url() ?>jenis_izin/save',
+				url: '<?= base_url() ?>periode/save',
 				type: 'POST',
 				dataType: 'JSON',
 				data: data,
 			})
 			.done(function(data) {
 				if (data == 1) {
-					$(".form-input").html("");
-					$(".form-input").append('<input type="text" class="form-control mt-2" name="nama_izin[]" required>');
 					getData();
 					Swal.fire('Simpan!', '', 'success');
 				}
@@ -158,13 +161,15 @@ $this->load->view('layout/footer');
 		
 
 		$.ajax({
-			url: '<?= base_url() ?>jenis_izin/getDataBy/'+idUpdate,
+			url: '<?= base_url() ?>periode/getDataBy/'+idUpdate,
 			type: 'POST',
 			dataType: 'JSON',
 		})
 		.done(function(data) {
 		
-			$("#data-update input").val(data.nama);
+			$("#data-update input[name='kode']").val(data.kode);
+			$("#data-update input[name='start']").val(data.start);
+			$("#data-update input[name='finish']").val(data.finish);
 			$("#update").modal("show");
 
 		});
@@ -177,7 +182,7 @@ $this->load->view('layout/footer');
 		
 
 		$.ajax({
-			url: '<?= base_url() ?>jenis_izin/saveUpdate/'+idUpdate,
+			url: '<?= base_url() ?>periode/saveUpdate/'+idUpdate,
 			type: 'POST',
 			dataType: 'JSON',
 			data : data,
@@ -198,7 +203,7 @@ $this->load->view('layout/footer');
 	$(document).on('click', '.delete',function(event) {
 			
 		event.preventDefault();
-		var nip = $(this).attr("data-id");
+		var id = $(this).attr("data-id");
 		
 
 		Swal.fire({
@@ -212,7 +217,7 @@ $this->load->view('layout/footer');
 
 		  if (result.isConfirmed) {
 		   		$.ajax({
-					url: '<?= base_url() ?>jenis_izin/delete/'+nip,
+					url: '<?= base_url() ?>periode/delete/'+id,
 					type: 'POST',
 					dataType: 'JSON',
 				})
@@ -230,7 +235,7 @@ $this->load->view('layout/footer');
 
 	function getData() {
 		$.ajax({
-			url: '<?= base_url() ?>jenis_izin/getData',
+			url: '<?= base_url() ?>periode/getData',
 			type: 'GET',
 			dataType: 'JSON',
 			async:false,
@@ -244,7 +249,9 @@ $this->load->view('layout/footer');
 				html += "<tr valign='middle'>"+
 							"<td>"+no+"</td>"+
 							"<td><a class='btn btn-default btn-sm text-info edit' id='edit' data-id='"+data[i].id+"' title='Edit' href='#'><i class='far fa-edit'></i></a><a class='btn btn-default btn-sm text-danger delete' id='delete' title='Hapus' href='#' data-id='"+data[i].id+"'><i class='fas fa-trash-alt'></i></a></td>"+
-							"<td>"+data[i].nama+"</td>"+
+							"<td>"+data[i].kode+"</td>"+
+							"<td>"+data[i].start+"</td>"+
+							"<td>"+data[i].finish+"</td>"+
 						"</tr>";
 				no++;
 			}

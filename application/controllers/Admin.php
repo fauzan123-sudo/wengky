@@ -72,42 +72,8 @@ class Admin extends CI_Controller {
 
 	function read_pegawai(){  
           
-           $fetch_data = $this->m_pegawai->make_datatables();  
-           $data = array();  
-           $no = 1;
-           foreach($fetch_data as $row)  
-           {  
-                $sub_array = array();  
-                 $sub_array[] = $no;
-                $sub_array[] = 
-	                '<button type="button" name="update" id="'.$row->nip.'"  class="btn btn-sm edit mr-2"><i class="fa fa-edit fa-sm"></i>
-					</button>'.'<button type="button" name="delete" id="'.$row->nip.'" class="btn btn-sm delete-data btn-transparent"><i class="fa fa-trash fa-sm" aria-hidden="true"></i>
-					</button>
-					<a href="'.base_url().'index.php/admin/detail_pegawai/'.$row->nip.'" name="detail" id="'.$row->nip.'" class="btn btn-sm  btn-transparent"><i class="fa fa-info fa-sm" aria-hidden="true"></i>
-					</a>';  
-				$sub_array[] = $this->security->xss_clean($row->nip);  	
-                $sub_array[] = $this->security->xss_clean($row->nama);  
-                // $sub_array[] = $this->security->xss_clean($row->tempat_lahir);  
-                $date = time_indo_convert($row->tgl_lahir);
-                $sub_array[] = $this->security->xss_clean($date[0]);  
-                // $sub_array[] = $this->security->xss_clean($row->alamat);  
-                $sub_array[] = $this->security->xss_clean($row->email);  
-                $sub_array[] = $this->security->xss_clean($row->no_tlp);  
-                $sub_array[] = $this->security->xss_clean($row->jabatan);  
-                
-                // $sub_array[] = $this->security->xss_clean($row->username);  
-                // $sub_array[] = '<img src="'.base_url().'upload/image/pegawai/'.$row->image.'" class="img-thumbnail" width="50" height="35" />'; 
-                // $sub_array[] = '<img src="'.base_url().'upload/code_qr/'.$row->code_qr.'" class="img-thumbnail" width="50" height="35" />';
-                $data[] = $sub_array; 
-                $no++; 
-           }  
-           $output = array(  
-                "draw"                    =>     intval($_POST["draw"]),  
-                "recordsTotal"          =>      $this->m_pegawai->get_all_data(),  
-                "recordsFiltered"     =>     $this->m_pegawai->get_filtered_data(),  
-                "data"                    =>     $data  
-           );  
-
+           $post = $this->input->post();
+           $output = $this->m_pegawai->getData($post);
            echo json_encode($output);  
       }  
 

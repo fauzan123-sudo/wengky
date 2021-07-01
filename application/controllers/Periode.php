@@ -23,17 +23,19 @@ class Periode extends CI_Controller {
 		$this->load->view('periode/index',$data);
 	}
 	function save(){
-		$data = $this->input->post('nama_izin'); 
+		$kode = $this->input->post('kode'); 
+		$start = $this->input->post('start'); 
+		$finish = $this->input->post('finish'); 
 		$status = 0;
-		for($i=0;$i < count($data);$i++) {
-			if ($data[$i] != "") {
-				$dataSend = array( 'nama' => $data[$i]);
-				$this->m_jenis_izin->addData($dataSend);
-				$status = 1;
-			}
+		
+		$data = array(
+					'kode' => $kode, 
+					'start' => $start, 
+					'finish' => $finish, 
+				);
+		if ($this->m_periode->addData($data) == 1) {
+			$status = 1;
 		}
-			
-
 		echo json_encode($status);
 		
 	}
@@ -42,9 +44,13 @@ class Periode extends CI_Controller {
 		$dataResult = [];
 
 		for ($i=0; $i < count($data); $i++) { 
+			$start = time_indo_convert($data[$i]->start);
+			$finish = time_indo_convert($data[$i]->finish);
 			$dataResult[$i] = array(
 				'id' =>  ci_encode($data[$i]->id_periode), 
 				'kode' => $data[$i]->kode , 
+				'start' =>  $start[0], 
+				'finish' =>  $finish[0], 
 			);
 		}
 
@@ -52,7 +58,7 @@ class Periode extends CI_Controller {
 	}
 	function delete($id){
 		$status = 0;
-		$data = $this->m_jenis_izin->deleteData(ci_decode($id));
+		$data = $this->m_periode->deleteData(ci_decode($id));
 		if ($data) {
 			$status = 1;
 		}
@@ -60,19 +66,26 @@ class Periode extends CI_Controller {
 
 	}
 	function getDataBy($id){
-		$data = $this->m_jenis_izin->getDataBy(ci_decode($id))->row();
+		$data = $this->m_periode->getDataBy(ci_decode($id))->row();
 		
 		echo json_encode($data);
 	}
 	function saveUpdate($id){
-		$input = $this->input->post('nama_izin'); 
+		$kode = $this->input->post('kode'); 
+		$start = $this->input->post('start'); 
+		$finish = $this->input->post('finish'); 
 		 
 
 		$status = 0;
 
-		$data = array('nama' => $input);
+		$data = array(
+					'kode' => $kode, 
+					'start' => $start, 
+					'finish' => $finish, 
+				);
 
-		if ($this->m_jenis_izin->updateData($data,ci_decode($id)) == 1) {
+
+		if ($this->m_periode->updateData($data,ci_decode($id)) == 1) {
 			$status = 1;
 		}
 			

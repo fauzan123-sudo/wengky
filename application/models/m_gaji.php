@@ -14,13 +14,11 @@ class M_gaji extends CI_Model{
        $this->db->select($this->select_column);  
        $this->db->from('gaji'); 
        $this->db->join('pegawai','gaji.id_pegawai=pegawai.id_pegawai','left');
-       $this->db->join('potongan','gaji.potongan=potongan.potongan','left');
        $this->db->where('periode',$this->session->userdata('periode'));
 
          if(isset($_POST["search"]["value"]))  {  
               $this->db->like("nama", $_POST["search"]["value"]);  
-              $this->db->or_like("gaji_pokok", $_POST["search"]["value"]);  
-              $this->db->or_like("asuransi", $_POST["search"]["value"]);  
+              $this->db->or_like("gaji_pokok", $_POST["search"]["value"]);   
               $this->db->or_like("nip", $_POST["search"]["value"]);   
          }  
 

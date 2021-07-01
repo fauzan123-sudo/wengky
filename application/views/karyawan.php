@@ -176,7 +176,7 @@ $this->load->view('layout/header_content');
 							  <div class="form-group">
 							    <label for="up_jabatan">Jabatan</label>
 							    <select class="custom-select" name="up_jabatan">
-							    	<option disabled>Pilih Jabatan</option>
+							    	
 							    	
 							    </select>
 							  </div>
@@ -260,19 +260,29 @@ var id_karyawan;
 				"processing": true, //Feature control the processing indicator.
 	            "serverSide": true,
 	            "hover" : true,
-	            "language": {
-            		processing: ''},
-	          	"order" :[],
-				"ajax" :{
-					 url: "<?= base_url() ?>index.php/admin/read_pegawai",
-	       			 type:"post"
-				},
+	          	'serverMethod': 'post',
+	          	'ajax': {
+	            	'url':'<?php echo site_url('admin/read_pegawai')?>'
+	          	},
+        		responsive: true,
 				"columnDefs":[
 					{
 						"targets" : [0,3,-2,-1],
 						"orderable" : false
 					},
 				],
+				responsive: true,
+	          	columns: [
+		            { data: 'no'},
+		            { data: 'action'},
+		            { data: 'nip' },
+		            { data: 'nama' },
+		            { data: 'tanggal_lahir' },
+		            { data: 'email' },
+		            { data: 'telepon' },
+		            { data: 'jabatan' },
+		       
+	          	],
 			
 			});
 		}
@@ -353,7 +363,7 @@ var id_karyawan;
 
 		$(document).on('click','.edit',function () {
 			var id = $(this).attr('id');
-			var htmlOpt = "";
+			var htmlOpt = "<option selected disabled>Pilih Jabatan</option>";
 			// console.log("cek jabatan ",getJabatan());
 			$.ajax({
 				type : 'ajax',
@@ -376,6 +386,7 @@ var id_karyawan;
 						dataType: 'JSON',
 					})
 					.done(function(jabatan) {
+						$('select[name="up_jabatan"] option').remove();
 						for (var i = 0; i < jabatan.length; i++) {
 							if (jabatan[i].nama == data[0].jabatan) {
 								htmlOpt += "<option selected value='"+jabatan[i].nama+"'>"+jabatan[i].nama+"</option>";

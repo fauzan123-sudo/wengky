@@ -1,2 +1,4 @@
-Periode
+Periode -> edit - hapus
 izin
+gaji->error
+

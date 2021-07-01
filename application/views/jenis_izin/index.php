@@ -236,20 +236,27 @@ $this->load->view('layout/footer');
 			async:false,
 		})
 		.done(function(data) {
-			console.log(data);
-			$("#table_izin tr").remove();
-			var no = 1;
 			var html = "";
-			for (var i = 0; i < data.length; i++) {
-				html += "<tr valign='middle'>"+
-							"<td>"+no+"</td>"+
-							"<td><a class='btn btn-default btn-sm text-info edit' id='edit' data-id='"+data[i].id+"' title='Edit' href='#'><i class='far fa-edit'></i></a><a class='btn btn-default btn-sm text-danger delete' id='delete' title='Hapus' href='#' data-id='"+data[i].id+"'><i class='fas fa-trash-alt'></i></a></td>"+
-							"<td>"+data[i].nama+"</td>"+
-						"</tr>";
-				no++;
-			}
+			if (data.length != 0) {
+				$("#table_izin tr").remove();
+					var no = 1;
+					
+					for (var i = 0; i < data.length; i++) {
+						html += "<tr valign='middle'>"+
+									"<td>"+no+"</td>"+
+									"<td><a class='btn btn-default btn-sm text-info edit' id='edit' data-id='"+data[i].id+"' title='Edit' href='#'><i class='far fa-edit'></i></a><a class='btn btn-default btn-sm text-danger delete' id='delete' title='Hapus' href='#' data-id='"+data[i].id+"'><i class='fas fa-trash-alt'></i></a></td>"+
+									"<td>"+data[i].nama+"</td>"+
+								"</tr>";
+						no++;
+					}
+					
+					
+				}else{
+					html = '<tr><td  colspan="3"><div class="alert alert-default text-center" role="alert">Data Masih Kosong</div></td></tr>';
+				}
+
+				$("#table_izin").append(html);
 			
-			$("#table_izin").append(html);
 		});
 		
 		

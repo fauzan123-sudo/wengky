@@ -7,6 +7,7 @@
 class M_jenis_izin extends CI_Model{
 	function addData($data){
 		$this->db->insert('m_jenis_izin',$data);
+		return $this->db->affected_rows();
 	}
 	function getData(){
 		$this->db->select("*");
