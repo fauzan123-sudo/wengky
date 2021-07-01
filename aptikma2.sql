@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 29 Jun 2021 pada 17.41
+-- Waktu pembuatan: 01 Jul 2021 pada 05.31
 -- Versi server: 10.4.18-MariaDB
 -- Versi PHP: 7.3.28
 
@@ -125,6 +125,13 @@ CREATE TABLE `m_departement` (
   `edited_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `m_departement`
+--
+
+INSERT INTO `m_departement` (`id_departement`, `nama`, `created_date`, `created_by`, `edited_by`, `edited_date`) VALUES
+(1, 'CEO', '0000-00-00 00:00:00', 0, 0, '0000-00-00 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -175,6 +182,13 @@ CREATE TABLE `m_periode` (
   `edited_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `m_periode`
+--
+
+INSERT INTO `m_periode` (`id_periode`, `kode`, `start`, `finish`, `created_date`, `created_by`, `edited_date`, `edited_by`) VALUES
+(2, 202102, '2021-06-07', '2021-06-08', '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -219,16 +233,17 @@ CREATE TABLE `pegawai` (
   `image` varchar(200) NOT NULL,
   `code_qr` varchar(225) NOT NULL,
   `string_qr_code` varchar(225) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `periode` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `pegawai`
 --
 
-INSERT INTO `pegawai` (`id_pegawai`, `nama`, `tempat_lahir`, `tgl_lahir`, `alamat`, `email`, `no_tlp`, `jabatan`, `nip`, `username`, `password`, `image`, `code_qr`, `string_qr_code`, `date`) VALUES
-(5, 'fathur', 'Malang', '2020-09-09', 'WAJAK', 'syafi.addin@gmail.com', '129312093813', 'presiden', '00001', 'Fathur123', '', '481b998e898f8d74c0982f7974947bb3.png', 'kSYWgKNsHC.png', 'kSYWgKNsHC', '2020-10-01 07:48:08'),
-(6, 'Fatur', 'Malang', '2020-09-02', 'Wajak', 'syafi.addin@gmail.com', '12312314123', 'CEO', '00002', 'Fathur123', '', 'ff5bff6a5561785a8e238b64f4ecea46.PNG', '9BHpRjSAuB.png', '9BHpRjSAuB', '2020-10-01 07:48:08');
+INSERT INTO `pegawai` (`id_pegawai`, `nama`, `tempat_lahir`, `tgl_lahir`, `alamat`, `email`, `no_tlp`, `jabatan`, `nip`, `username`, `password`, `image`, `code_qr`, `string_qr_code`, `date`, `periode`) VALUES
+(5, 'fathur', 'Malang', '2020-09-09', 'WAJAK', 'syafi.addin@gmail.com', '129312093813', 'presiden', '00001', 'Fathur123', '', '481b998e898f8d74c0982f7974947bb3.png', 'kSYWgKNsHC.png', 'kSYWgKNsHC', '2021-06-30 14:41:49', '202102'),
+(6, 'Fatur', 'Malang', '2020-09-02', 'Wajak', 'syafi.addin@gmail.com', '12312314123', 'CEO', '00002', 'Fathur123', '', 'ff5bff6a5561785a8e238b64f4ecea46.PNG', '9BHpRjSAuB.png', '9BHpRjSAuB', '2021-06-30 14:41:49', '202102');
 
 -- --------------------------------------------------------
 
@@ -237,7 +252,7 @@ INSERT INTO `pegawai` (`id_pegawai`, `nama`, `tempat_lahir`, `tgl_lahir`, `alama
 --
 
 CREATE TABLE `potongan` (
-  `potongan` int(11) NOT NULL,
+  `id_potongan` int(11) NOT NULL,
   `jenis_potongan` text NOT NULL,
   `potong_gaji` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -246,7 +261,7 @@ CREATE TABLE `potongan` (
 -- Dumping data untuk tabel `potongan`
 --
 
-INSERT INTO `potongan` (`potongan`, `jenis_potongan`, `potong_gaji`) VALUES
+INSERT INTO `potongan` (`id_potongan`, `jenis_potongan`, `potong_gaji`) VALUES
 (1, 'Absen A 3 x ', 30000);
 
 -- --------------------------------------------------------
@@ -274,7 +289,7 @@ CREATE TABLE `potongan_detail` (
 
 CREATE TABLE `riwayat_absensi` (
   `id_riwayat` int(11) NOT NULL,
-  `id_karyawan` int(11) NOT NULL,
+  `id_pegawai` int(11) NOT NULL,
   `jam` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` varchar(225) NOT NULL COMMENT 'status 1 = Masuk, Status 2 = Sakit , Status 3 = Izin, Telat = 4',
   `lokasi` text NOT NULL
@@ -284,7 +299,7 @@ CREATE TABLE `riwayat_absensi` (
 -- Dumping data untuk tabel `riwayat_absensi`
 --
 
-INSERT INTO `riwayat_absensi` (`id_riwayat`, `id_karyawan`, `jam`, `status`, `lokasi`) VALUES
+INSERT INTO `riwayat_absensi` (`id_riwayat`, `id_pegawai`, `jam`, `status`, `lokasi`) VALUES
 (1, 6, '2020-10-04 00:57:30', '1', '');
 
 -- --------------------------------------------------------
@@ -343,7 +358,10 @@ INSERT INTO `riwayat_login` (`id_rlogin`, `id_user`, `waktu`) VALUES
 (37, 1, '2020-10-04 00:55:31'),
 (38, 1, '2020-10-04 01:01:04'),
 (39, 1, '2020-10-04 04:36:20'),
-(40, 1, '2021-06-29 14:45:43');
+(40, 1, '2021-06-29 14:45:43'),
+(41, 1, '2021-06-30 11:33:32'),
+(42, 1, '2021-06-30 11:53:41'),
+(43, 1, '2021-07-01 00:27:15');
 
 -- --------------------------------------------------------
 
@@ -383,8 +401,7 @@ ALTER TABLE `data_bulan`
 -- Indeks untuk tabel `gaji`
 --
 ALTER TABLE `gaji`
-  ADD PRIMARY KEY (`id_gaji`),
-  ADD KEY `id_pegawai` (`id_pegawai`);
+  ADD PRIMARY KEY (`id_gaji`);
 
 --
 -- Indeks untuk tabel `h_login`
@@ -434,7 +451,7 @@ ALTER TABLE `pegawai`
 -- Indeks untuk tabel `potongan`
 --
 ALTER TABLE `potongan`
-  ADD PRIMARY KEY (`potongan`);
+  ADD PRIMARY KEY (`id_potongan`);
 
 --
 -- Indeks untuk tabel `potongan_detail`
@@ -447,7 +464,7 @@ ALTER TABLE `potongan_detail`
 --
 ALTER TABLE `riwayat_absensi`
   ADD PRIMARY KEY (`id_riwayat`),
-  ADD KEY `id_karyawan` (`id_karyawan`);
+  ADD KEY `id_karyawan` (`id_pegawai`);
 
 --
 -- Indeks untuk tabel `riwayat_login`
@@ -501,7 +518,7 @@ ALTER TABLE `h_login`
 -- AUTO_INCREMENT untuk tabel `m_departement`
 --
 ALTER TABLE `m_departement`
-  MODIFY `id_departement` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_departement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `m_izin`
@@ -519,7 +536,7 @@ ALTER TABLE `m_jenis_izin`
 -- AUTO_INCREMENT untuk tabel `m_periode`
 --
 ALTER TABLE `m_periode`
-  MODIFY `id_periode` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_periode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `m_users`
@@ -537,7 +554,7 @@ ALTER TABLE `pegawai`
 -- AUTO_INCREMENT untuk tabel `potongan`
 --
 ALTER TABLE `potongan`
-  MODIFY `potongan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_potongan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `potongan_detail`
@@ -555,7 +572,7 @@ ALTER TABLE `riwayat_absensi`
 -- AUTO_INCREMENT untuk tabel `riwayat_login`
 --
 ALTER TABLE `riwayat_login`
-  MODIFY `id_rlogin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_rlogin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT untuk tabel `riwayat_update_qr`
@@ -584,7 +601,7 @@ ALTER TABLE `h_login`
 -- Ketidakleluasaan untuk tabel `riwayat_absensi`
 --
 ALTER TABLE `riwayat_absensi`
-  ADD CONSTRAINT `rls_absn_gawai` FOREIGN KEY (`id_karyawan`) REFERENCES `pegawai` (`id_pegawai`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `rls_absn_gawai` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id_pegawai`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
